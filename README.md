@@ -1,7 +1,14 @@
-# ng2-testable-lib
+# Generate the ng2-testable-library
 
-Tutorial on building a testable **Angular2** library.
+Yeoman and generator-angular2-library are required, install them if they are not :
+```bash
+npm install -g yo
+npm install -g generator-angular2-library
+```
+Generate the library :
+```bash
+yo angular2-library
+```
+Then set the configuration options according to your context and your git profile. 
 
-This project takes the developer through the process of building a library for Angular2. The library will be generated with the [generator-angular2-library](https://github.com/jvandemo/generator-angular2-library) which currently does not provide a test environment. 
-
-It will be explained how to configure the project to run tests with **Karma** and **Jasmine**.
+All files required to compile our library have been installed.
