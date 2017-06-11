@@ -22,3 +22,4 @@ src/**/*.js
 # coverage
 coverage
 ```
+Delete the generated `README.MD` file.
