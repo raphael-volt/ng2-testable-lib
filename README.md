@@ -12,3 +12,13 @@ yo angular2-library
 Then set the configuration options according to your context and your git profile. 
 
 All files required to compile our library have been installed.
+
+Add the following rules into the generated `.gitignore` file:
+```txt
+# Karma transform
+init-test-bed.spec.js
+src/**/*.js
+
+# coverage
+coverage
+```
