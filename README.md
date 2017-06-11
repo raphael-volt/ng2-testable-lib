@@ -60,3 +60,28 @@ Do you want Karma to watch all the files and run the tests on change ?
 Press tab to list possible options.
 > yes
 ```
+Edit karma.config.js to add more options :
+```js
+module.exports = function(config) {
+  config.set({
+    // ...
+    frameworks: ['jasmine', 'karma-typescript'],
+    // ...
+    preprocessors: {
+        '**/*.ts': ['karma-typescript']
+    },
+    karmaTypescriptConfig: {
+      bundlerOptions: {
+        entrypoints: /\.spec\.ts$/,
+        transforms: [
+          require('karma-typescript-angular2-transform')
+        ]
+      },
+      compilerOptions: {
+        lib: ['ES2015', 'DOM']
+      }
+    },
+    reporters: ['progress', 'karma-typescript'],
+  })
+})
+```
