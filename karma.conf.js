@@ -41,7 +41,14 @@ module.exports = function (config) {
         lib: ['ES2015', 'DOM']
       }
     },
-
+    customLaunchers: {
+      Chrome_with_debugging: {
+        base: 'Chrome',
+        flags: ['--remote-debugging-port=9222'],
+        debug: true
+      }
+    },
+    browserNoActivityTimeout: 100000,
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
