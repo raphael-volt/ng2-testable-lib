@@ -9,7 +9,8 @@
     "docs:serve": "npm run docs:build -- -s",
     "docs:watch": "npm run docs:build -- -s -w",
     "lint": "tslint --type-check --project tsconfig.json src/**/*.ts",
-    "test": "tsc && karma start"
+    "test": "tsc && karma start",
+    "test:debug": "tsc && karma start karma.conf.js --browsers Chrome_with_debugging"
   },
   "repository": {
     "type": "git",
