@@ -49,6 +49,7 @@ import 'zone.js/dist/proxy.js'
 import 'zone.js/dist/sync-test.js'
 import 'zone.js/dist/jasmine-patch.js'
 import 'zone.js/dist/async-test.js'
+import 'zone.js/dist/fake-async-test.js'
 import { TestBed } from '@angular/core/testing'
 import { 
   BrowserDynamicTestingModule, 
@@ -180,6 +181,11 @@ describe('SampleTest', () => {
         setTimeout(() => {
             expect(true).toBeTruthy()
         }, 500)
+    }))
+    
+    it('should expect fakeAsync', fakeAsync(() => {
+        tick()
+        expect(true).toBeTruthy()
     }))
 
     it('should inject', inject([SampleService], (service: SampleService) => {
