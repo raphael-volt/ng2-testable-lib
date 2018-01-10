@@ -1,0 +1,23 @@
+{
+  "name": "sample",
+  "version": "1.0.0-alpha.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raphael-volt/ng2-testable-lib-sample.git"
+  },
+  "author": "raphael-volt",
+  "private": true,
+  "peerDependencies": {
+    "@angular/core": "^5.0.0",
+    "@angular/common": "^5.0.0"
+  },
+  "ngPackage": {
+    "$schema": "../node_modules/ng-packagr/ng-package.schema.json",
+    "workingDirectory": "../.ng_build",
+    "lib": {
+      "entryFile": "public_api.ts"
+    },
+    "dest": "dist/sample"
+  }
+}
