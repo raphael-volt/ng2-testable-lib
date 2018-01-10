@@ -1,7 +1,13 @@
 {
   "compileOnSave": false,
+  "angularCompilerOptions": {
+    "paths": {
+      "sample": [ "../sample/public_api.ts" ]
+    }
+  },
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
+    "baseUrl": "src",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
@@ -14,6 +20,9 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "sample": ["../sample/public_api.ts"]
+    }
   }
 }

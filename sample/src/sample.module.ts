@@ -8,6 +8,7 @@ import { SampleService } from "./sample.service";
     CommonModule
   ],
   declarations: [SampleComponent],
-  providers: [SampleService]
+  providers: [SampleService],
+  exports: [SampleComponent]
 })
 export class SampleModule { }
