@@ -9,7 +9,11 @@ describe('SampleService', () => {
     });
   });
 
-  it('should be created', inject([SampleService], (service: SampleService) => {
+  it('should inject', inject([SampleService], (service: SampleService) => {
     expect(service).toBeTruthy();
+  }));
+  
+  it("should have a name 'SampleService'", inject([SampleService], (service: SampleService) => {
+    expect(service.name).toEqual('SampleService')
   }));
 });

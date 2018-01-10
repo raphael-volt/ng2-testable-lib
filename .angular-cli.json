@@ -36,21 +36,21 @@
       "assets": [
         "assets"
       ],
-      "index": "./src/index.html",
-      "main": "./src/main.ts",
-      "polyfills": "./src/polyfills.ts",
-      "test": "./src/test.ts",
-      "tsconfig": "./src/tsconfig.app.json",
-      "testTsconfig": "./src/tsconfig.spec.json",
+      "index": "../src/index.html",
+      "main": "../src/main.ts",
+      "polyfills": "../src/polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "../src/tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
       "prefix": "",
       "styles": [
-        "./src/styles.css"
+        "../src/styles.css"
       ],
       "scripts": [],
-      "environmentSource": "./src/environments/environment.ts",
+      "environmentSource": "../src/environments/environment.ts",
       "environments": {
-        "dev": "./src/environments/environment.ts",
-        "prod": "./src/environments/environment.prod.ts"
+        "dev": "../src/environments/environment.ts",
+        "prod": "../src/environments/environment.prod.ts"
       }
     }
   ],
