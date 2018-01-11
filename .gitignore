@@ -16,6 +16,7 @@ src/*.d.ts
 
 # VS Code
 .vscode/*
+!.vscode/launch.json
 
 # Windows
 Thumbs.db
