@@ -2,10 +2,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug tests in Chrome",
+            "name": "Launch debug",
             "type": "chrome",
-            "request": "attach",
-            "port": 9222,
+            "request": "launch",
+            "url": "http://localhost:9876/debug.html",
             "sourceMaps": true,
             "webRoot": "${workspaceRoot}"
         }

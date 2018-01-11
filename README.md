@@ -1,246 +1,351 @@
 # ng2-testable-lib
 
-Tutorial on building a testable **Angular2** library.
+## Building an **Angular5** library with **@angular/cli** and **ng-packagr**
 
-See [ng2-lib-cli-tools](https://github.com/raphael-volt/ng2-lib-cli-tools) to automatically generate or update a library.
+This project takes the developer through the process of building an environment to create, test and build an **Angular5** library based on the [ng-packaged repository](https://github.com/dherges/ng-packaged.git). 
 
-This project takes the developer through the process of building a library for Angular2. The library will be generated with the [generator-angular2-library](https://github.com/jvandemo/generator-angular2-library) which currently does not provide a test environment. 
+### Set up an Angular CLI project
 
-It will be explained how to configure the project to run tests with **Karma** and **Jasmine**.
-
-# Generate the ng2-testable-library
-
-Yeoman and generator-angular2-library are required, install them if they are not :
-```bash
-npm install -g yo
-npm install -g generator-angular2-library
-```
-Generate the library :
-```bash
-yo angular2-library
-```
-Then set the configuration options according to your context and your git profile. 
-
-All files required to compile our library have been installed.
-
-Add the following rules into the generated [.gitignore](.gitignore) file:
-```txt
-# Karma transform
-init-test-bed.spec.js
-src/**/*.js
-
-# coverage
-coverage
-```
-Delete the generated [README.MD](README.MD) file.
-
-# Configuring `Karma`
-
-Install the required dependencies to enable **typescript** to **js** transformation :
+Get benefits of **@angular/cli** :
 
 ```bash
-npm install --save-dev karma-typescript karma-typescript-angular2-transform
+ng new library-generator
 ```
-Create the [init-test-bed.spec.ts](init-test-bed.spec.ts) which will import the required plugins:
+
+### Create the **sample** library
+
+Create the library folder on the top of the angular app.
+
+Create the library module [sample/src/sample.module.ts]()
+
 ```typescript
-import 'reflect-metadata'
-import 'zone.js/dist/zone.js'
-import 'zone.js/dist/proxy.js'
-import 'zone.js/dist/sync-test.js'
-import 'zone.js/dist/jasmine-patch.js'
-import 'zone.js/dist/async-test.js'
-import 'zone.js/dist/fake-async-test.js'
-import { TestBed } from '@angular/core/testing'
-import { 
-  BrowserDynamicTestingModule, 
-  platformBrowserDynamicTesting 
-} from '@angular/platform-browser-dynamic/testing'
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
-TestBed.initTestEnvironment(
-  BrowserDynamicTestingModule, 
-  platformBrowserDynamicTesting()
-)
-```
-Init `Karma` :
-```bash
-karma init
-```
-Set configuration options as below:
-```txt
-Which testing framework do you want to use ?
-Press tab to list possible options. Enter to move to the next question.
-> jasmine
-
-Do you want to use Require.js ?
-This will add Require.js plugin.
-Press tab to list possible options. Enter to move to the next question.
-> no
-
-Do you want to capture any browsers automatically ?
-Press tab to list possible options. Enter empty string to move to the next question.
-> Chrome
->
-
-What is the location of your source and test files ?
-You can use glob patterns, eg. 'js/*.js' or 'test/**/*Spec.js'.
-Enter empty string to move to the next question.
-> init-test-bed.spec.ts
-> src/**/*.ts
->
-
-Should any of the files included by the previous patterns be excluded ?
-You can use glob patterns, eg. '**/*.swp'.
-Enter empty string to move to the next question.
->
-
-Do you want Karma to watch all the files and run the tests on change ?
-Press tab to list possible options.
-> yes
-```
-Edit [karma.config.js](karma.config.js) to add more options :
-```js
-module.exports = function(config) {
-  config.set({
-    // ...
-    frameworks: ['jasmine', 'karma-typescript'],
-    // ...
-    preprocessors: {
-        '**/*.ts': ['karma-typescript']
-    },
-    karmaTypescriptConfig: {
-      bundlerOptions: {
-        entrypoints: /\.spec\.ts$/,
-        transforms: [
-          require('karma-typescript-angular2-transform')
-        ]
-      },
-      compilerOptions: {
-        lib: ['ES2015', 'DOM']
-      }
-    },
-    reporters: ['progress', 'karma-typescript'],
-  })
+@NgModule({
+  imports: [
+    CommonModule
+  ],
+  declarations: [],
+  providers: [],
+  exports: []
 })
+export class SampleModule { }
+
 ```
 
-# Configuring `typescript`
+Create the library entry point [sample/public_api.ts]()
 
-Edit the [tsconfig.json](tsconfig.json) file to add the required types and **es6** interpretor.
+```typescript
+export * from './src/sample.module'
+```
+
+### Register the library
+
+Open **.angular-cli.json** to add the app that describe the library (after the default app) :
+
 ```json
 {
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "project": {
+    "name": "ng-2-testable-lib"
+  },
+  "apps": [
+    {
+      // default app
+    },
+    {
+      "root": "sample",
+      "appRoot": "src",
+      "name": "sample",
+      "outDir": "dist/sample",
+      "assets": [
+        "assets"
+      ],
+      "index": "../src/index.html",
+      "main": "../src/main.ts",
+      "polyfills": "../src/polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "../src/tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "",
+      "styles": [
+        "../src/styles.css"
+      ],
+      "scripts": [],
+      "environmentSource": "../src/environments/environment.ts",
+      "environments": {
+        "dev": "../src/environments/environment.ts",
+        "prod": "../src/environments/environment.prod.ts"
+      }
+    }
+  ],
+  // ...
+}
+```
+
+Open **tsconfig.json** to map the library path :
+
+```json
+{
+  // ...
+  "angularCompilerOptions": {
+    "paths": {
+      "sample": [ "../sample/public_api.ts" ]
+    }
+  },
   "compilerOptions": {
-    "baseUrl": "./src",
-    "experimentalDecorators": true,
-    "moduleResolution": "node",
-    "rootDir": "./src",
-    "target": "es5",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es6",
-      "dom"
-    ],
-    "skipLibCheck": true,
-    "types": [
-      "jasmine",
-      "node"
-    ]
+    // ...
+    "paths": {
+      "sample": ["../sample/public_api.ts"]
+    }
+  }
+}
+
+```
+
+Relaunch **vscode** to ensure that the new typescript configuration is available. 
+
+Import the **sample.module** in [src/app/app.module.ts](). You should have benefits of **vscode intellisense**.
+
+```typescript
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { SampleModule } from "sample";
+
+import { AppComponent } from './app.component';
+
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    SampleModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+```
+
+Copy [src/app/test.ts]() to [sample/test.ts](). 
+
+Copy [src/app/tsconfig.spec.ts]() to [sample/tsconfig.spec.ts](). 
+
+This files will be required for running the **sample library** unit tests.
+
+Ensure that everything is fine :
+
+```bash
+ng test
+```
+
+### Create the **sample-component**
+
+Use the **--app** parameter to specify the app that use it :
+
+```bash
+ng g component sample --app=sample
+```
+
+Take a look to the **sample.module** :
+
+```typescript
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { SampleComponent } from './sample/sample.component';
+
+@NgModule({
+  imports: [
+    CommonModule
+  ],
+  declarations: [SampleComponent],
+  providers: [],
+  exports: []
+})
+export class SampleModule { }
+```
+
+Awesome, but you have to export manually the **sample.component** in the module :
+
+```typescript
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { SampleComponent } from './sample/sample.component';
+
+@NgModule({
+  imports: [
+    CommonModule
+  ],
+  declarations: [SampleComponent],
+  providers: [],
+  exports: [SampleComponent]
+})
+export class SampleModule { }
+```
+
+and in [sample/public_api.ts]() :
+
+```typescript
+export * from './src/sample.module'
+// All public members of the library must be added here.
+export * from './src/sample/sample.component'
+```
+
+Add an instance of the **sample-component** in [src/app/app.component.html] :
+
+```html
+<div style="text-align:center">
+  <h1>
+    Welcome to {{ title }}!
+  </h1>
+  <sample></sample>
+</div>
+```
+
+Ensure that everything is fine :
+
+```bash
+ng serve
+```
+
+**sample.component** should be rendered as expected.
+
+### Testing
+
+To execute [src/app/app.component.spec.ts]() with success, the **sample.module** must be imported in the test bed configuration :
+
+```typescript
+import { TestBed, async } from '@angular/core/testing';
+import { AppComponent } from './app.component';
+import { SampleModule } from "sample";
+describe('AppComponent', () => {
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [
+        AppComponent
+      ],
+      imports: [
+        SampleModule
+      ]
+    }).compileComponents();
+  }));
+  // ...
+}
+```
+
+Run the tests of the app :
+
+```bash
+ng test
+```
+
+Run the tests of the library :
+
+```bash
+ng test --app=sample
+```
+
+## Debugging with **Chrome DevTools Overview**
+
+Open the debug page, open the **Chrome DevTools Overview**, open **Sources** tab, served files are in [top/webpack]().
+
+## Debugging with **vscode**
+
+Add a launch chrome task :
+
+```json
+{
+    "name": "Launch debug",
+    "type": "chrome",
+    "request": "launch",
+    "url": "http://localhost:9876/debug.html",
+    "sourceMaps": true,
+    "webRoot": "${workspaceRoot}"
+}
+```
+
+Run `ng test` or `ng test --app=sample`.
+
+Add some break points.
+
+Run **Launch debug**.
+
+## Packaging the library
+
+Install [ng-packagr](https://github.com/dherges/ng-packagr) :
+
+```bash
+npm i -D ng-packagr
+```
+
+Create the [sample/package.json]() that describe the library and the **ng-packagr** configuration :
+
+```json
+{
+  "name": "sample",
+  "version": "1.0.0-alpha.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raphael-volt/ng2-testable-lib-sample.git"
+  },
+  "author": "raphael-volt",
+  "private": true,
+  "peerDependencies": {
+    "@angular/core": "^5.0.0",
+    "@angular/common": "^5.0.0"
+  },
+  "ngPackage": {
+    "$schema": "../node_modules/ng-packagr/ng-package.schema.json",
+    "workingDirectory": "../.ng_build",
+    "lib": {
+      "entryFile": "public_api.ts"
+    },
+    "dest": "dist/sample"
   }
 }
 ```
-# Basic sample test
 
-Create the [sample.spec.ts](sample.spec.ts) in the **src** directory :
-```typescript
-import { TestBed, inject, async } from '@angular/core/testing';
-import { SampleModule, SampleService } from "./";
-describe('SampleTest', () => {
-    beforeEach(() => {
-        TestBed.configureTestingModule({
-            providers: [
-                {
-                    provide: SampleService,
-                    deps: [],
-                    useFactory: () => {
-                        return new SampleService()
-                    }
-                }
-            ],
-            imports: [
-                SampleModule
-            ]
-        })
-    })
+Create the build task in app [package.json]()
 
-    it('should expect', () => {
-        expect(true).toBeTruthy()
-    })
-
-    it('should expect async', async(() => {
-        setTimeout(() => {
-            expect(true).toBeTruthy()
-        }, 500)
-    }))
-    
-    it('should expect fakeAsync', fakeAsync(() => {
-        tick()
-        expect(true).toBeTruthy()
-    }))
-
-    it('should inject', inject([SampleService], (service: SampleService) => {
-        expect(service).toBeTruthy()
-    }))
-})
-```
-Start `Karma` :
-```bash
-npm test
-```
-The test should pass successfully :
-```bash
-Chrome 59.0.3071 (Linux 0.0.0): Executed 3 of 3 SUCCESS (0.568 secs / 0.56 secs)
-```
-
-# Debugging with vscode
-
-Install [Debugger for Chrome](https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome) if not.
-
-Create a new launch configuration.
-
-Add this configuration to [.vscode/lauch.json](.vscode/lauch.json):
 ```json
-        {
-            "name": "Debug tests in Chrome",
-            "type": "chrome",
-            "request": "attach",
-            "port": 9222,
-            "sourceMaps": true,
-            "webRoot": "${workspaceRoot}"
-        }
-```
-Set customLaunchers and browserNoActivityTimeout into [karma.conf.js](karma.conf.js) :
-```js
-    customLaunchers: {
-      Chrome_with_debugging: {
-        base: 'Chrome',
-        flags: ['--remote-debugging-port=9222'],
-        debug: true
-      }
-    },
-    browserNoActivityTimeout: 100000,
-```
-Add the command test:debug to [package.json](package.json)
-```json
-"scripts": {
-    ...
-    "test:debug": "tsc && karma start karma.conf.js --browsers Chrome_with_debugging"
-  }
-```
-Run tests :
-```bash
-npm run test:debug
-```
-Click the debug button in debug tab to connect vscode debugger.
+{
+  // ...
+   "scripts": {
+    // ...
+    "build:sample": "ng-packagr -p sample/package.json"
+  },
+  // ...
+}
 
-Add some breakpoints to your code. Then click restart button (ctrl+shift+F5) in the debugger tool bar.
+```
+
+then run it :
+
+```bash
+npm run build:sample
+```
+
+Generate the **tgz archive** :
+
+```bash
+cd dist/sample
+npm pack
+```
+
+## Install the library localy
+
+`cd` to an angular app, then :
+
+```bash
+npm i <relative-path-to-archive>
+``` 
+
+Import module to [app.module]() and in test bed configuration.
+
+
+## @TODO : publish to `npm`.

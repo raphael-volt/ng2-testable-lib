@@ -2,7 +2,9 @@
   "compileOnSave": false,
   "angularCompilerOptions": {
     "paths": {
-      "sample": [ "../sample/public_api.ts" ]
+      "sample": [
+        "../sample/public_api.ts"
+      ]
     }
   },
   "compilerOptions": {
@@ -22,7 +24,9 @@
       "dom"
     ],
     "paths": {
-      "sample": ["../sample/public_api.ts"]
+      "sample": [
+        "../sample/public_api.ts"
+      ]
     }
   }
 }
